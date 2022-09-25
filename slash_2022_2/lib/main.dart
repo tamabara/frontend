@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:slash_2022_2/screens/tama.dart';
 import 'package:slash_2022_2/utils/globals.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'screens/home.dart';
 import 'screens/result.dart';
@@ -12,10 +14,16 @@ import 'screens/result.dart';
 import 'utils/colors.dart';
 import 'utils/models.dart';
 
+import 'utils/globals.dart';
+
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
+  prefs = await SharedPreferences.getInstance();
+  score = load_score();
 
   runApp(const MyApp());
 }
@@ -26,32 +34,69 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        initialRoute: '/',
-        transitionDuration: const Duration(milliseconds: 500),
-        defaultTransition: Transition.fadeIn,
-        getPages: [
-          GetPage(
-            name: '/',
-            page: () => const HomeScreen(),
-            transition: Transition.fadeIn,
+      debugShowCheckedModeBanner: false,
+      transitionDuration: const Duration(milliseconds: 500),
+      defaultTransition: Transition.fadeIn,
+      theme: ThemeData(
+        primaryColor: green,
+        backgroundColor: vanilla,
+        scaffoldBackgroundColor: vanilla,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: vanilla,
+          surfaceTintColor: vanilla,
+          shadowColor: shadow
+        ),
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+          backgroundColor: vanilla
+        ),
+        textTheme: GoogleFonts.vt323TextTheme(Theme.of(context).textTheme),
+        useMaterial3: true
+      ),
+      home: const Navbar()
+    );
+  }
+}
+
+class Navbar extends StatefulWidget {
+  const Navbar({super.key});
+
+  @override
+  State<Navbar> createState() => _NavbarState();
+}
+
+class _NavbarState extends State<Navbar> {
+  List<Widget> _screens = [const HomeScreen(), const TamaScreen()];
+  int _selectedIndex = 0;
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      bottomNavigationBar: BottomNavigationBar(
+        enableFeedback: true,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.scanner),
+            label: 'Scanner',
           ),
-          GetPage(
-            name: '/result',
-            page: () => const ResultScreen(),
-            transition: Transition.rightToLeft,
-          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.gamepad),
+            label: 'Tama',
+          )
         ],
-        theme: ThemeData(
-            primaryColor: green,
-            backgroundColor: vanilla,
-            scaffoldBackgroundColor: vanilla,
-            appBarTheme: const AppBarTheme(
-                backgroundColor: vanilla,
-                surfaceTintColor: vanilla,
-                shadowColor: shadow),
-            textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
-            useMaterial3: true));
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped
+      ),
+      body: SafeArea(
+        child: _screens[_selectedIndex]
+      ),
+    );
   }
 }
 
@@ -72,11 +117,20 @@ void postRequest(String? bardcodeScanRes) async {
   print("${response.body}");
   var productData = Product.fromJson(jsonDecode(response.body));
   createGlobalProduct(productData);
-  Get.offNamed('/result');
+  Get.back();
+  Get.to(const ResultScreen());
 }
 
 void createGlobalProduct(Product productData) {
   productTitle = productData.title;
   productNutriScore = productData.nutri_score;
   productCarbonScore = productData.carbon_score;
+}
+
+int load_score() {
+  return prefs.getInt("score") ?? 0;
+}
+
+Future <void> save_score(int score) async {
+  await prefs.setInt("score", score);
 }

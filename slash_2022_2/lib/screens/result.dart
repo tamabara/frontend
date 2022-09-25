@@ -48,7 +48,7 @@ class ResultScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: vanilla,
+        backgroundColor: vanilla
       ),
       body: Column(children: [
         Center(child:
@@ -74,22 +74,20 @@ class ResultScreen extends StatelessWidget {
         Center(child:
           Text(productCarbonScore.toString(), style: TextStyle(fontSize: 28, color: productCarbonScore > 70 ? Colors.green : Colors.orange),)),
         Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Container(
-              padding: EdgeInsets.only(left: 40, top: 10),
-              child:
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(side: BorderSide(width: 2.0, color: darkGreen)),
-                child: Text("Back", style: TextStyle(color: darkGreen)),
-                onPressed: () => Get.offNamed('/'),)
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(side: BorderSide(width: 2.0, color: darkGreen)),
+              child: Text("Back", style: TextStyle(color: darkGreen)),
+              onPressed: () => Get.offNamed('/')
             ),
-            Container(
-              padding: EdgeInsets.only(left: 155, top: 10),
-              child:
-              OutlinedButton(
-                style: OutlinedButton.styleFrom(side: BorderSide(width: 2.0, color: darkGreen)),
-                child: Text("Feed!", style: TextStyle(color: darkGreen)),
-                onPressed: () => null),
+            OutlinedButton(
+              style: OutlinedButton.styleFrom(side: BorderSide(width: 2.0, color: darkGreen)),
+              child: Text("Feed!", style: TextStyle(color: darkGreen)),
+              onPressed: () {
+                Get.snackbar("Success", "Successfully added product to feed bowl", backgroundColor: Colors.green.withOpacity(0.5));
+                newscores.add(productCarbonScore);
+              }
             )
           ],
         ),
