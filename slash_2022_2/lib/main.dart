@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
+import 'package:slash_2022_2/utils/globals.dart';
 import 'dart:convert';
 import 'dart:async';
 import 'dart:io';
 
 import 'screens/home.dart';
+import 'screens/result.dart';
+
 import 'utils/colors.dart';
+import 'utils/models.dart';
 
 void main() async {
   runApp(const MyApp());
@@ -30,56 +35,47 @@ class MyApp extends StatelessWidget {
             page: () => const HomeScreen(),
             transition: Transition.fadeIn,
           ),
+          GetPage(
+            name: '/result',
+            page: () => const ResultScreen(),
+            transition: Transition.rightToLeft,
+          ),
         ],
         theme: ThemeData(
-          primaryColor: green,
-          backgroundColor: vanilla,
-          scaffoldBackgroundColor: vanilla,
-          appBarTheme: const AppBarTheme(
+            primaryColor: green,
             backgroundColor: vanilla,
-            surfaceTintColor: vanilla,
-            shadowColor: shadow
-          ),
-          textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
-          useMaterial3: true
-        ));
+            scaffoldBackgroundColor: vanilla,
+            appBarTheme: const AppBarTheme(
+                backgroundColor: vanilla,
+                surfaceTintColor: vanilla,
+                shadowColor: shadow),
+            textTheme: GoogleFonts.soraTextTheme(Theme.of(context).textTheme),
+            useMaterial3: true));
   }
 }
 
-// Future<http.Response> postRequest () async {
-//   Uri url ='https://fastapi-backend-slash2022.vercel.app/docs/product/info';
-//   var body = jsonEncode({ 'data': { 'apikey': '12345678901234567890' } });
-
-//   print("Body: " + body);
-
-//   http.post(url,
-//       headers: {"Content-Type": "application/json"},
-//       body: body
-//   ).then((http.Response response) {
-//     print("Response status: ${response.statusCode}");
-//     print("Response body: ${response.contentLength}");
-//     print(response.headers);
-//     print(response.request);
-
-//   });
-//   return body;
-// }
-
-Future<http.Response> postRequest() async {
-  // var url ='https://fastapi-backend-slash2022.vercel.app/docs/product/info';
+void postRequest(String? bardcodeScanRes) async {
   var url = Uri(
     scheme: 'https',
     host: 'fastapi-backend-slash2022.vercel.app',
     path: 'product/info',
   );
 
-  Map data = {"ean": "string"};
+  Map data = {"ean": bardcodeScanRes};
   //encode Map to JSON
-  var body = json.encode(data);
 
+  var body = json.encode(data);
   var response = await http.post(url,
       headers: {"Content-Type": "application/json"}, body: body);
   print("${response.statusCode}");
   print("${response.body}");
-  return response;
+  var productData = Product.fromJson(jsonDecode(response.body));
+  createGlobalProduct(productData);
+  Get.offNamed('/result');
+}
+
+void createGlobalProduct(Product productData) {
+  productTitle = productData.title;
+  productNutriScore = productData.nutri_score;
+  productCarbonScore = productData.carbon_score;
 }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:io/ansi.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:slash_2022_2/main.dart';
 
 import '../utils/colors.dart';
 
@@ -13,7 +14,7 @@ void getBarcode() async {
     false,
     ScanMode.BARCODE,
   );
-  print(barcodeScanRes);
+  postRequest(barcodeScanRes);
 }
 
 class HomeScreen extends StatelessWidget {
@@ -31,18 +32,18 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsets.only(bottom: 400),
                 child: Center(
                   child: SvgPicture.asset(
-                    '/Users/fiodaryuzhyk/slash_frontend/slash_2022_2/assets/slash_logo.svg',
+                    'assets/slash_logo.svg',
                     semanticsLabel: 'TamabaraLogo',
                     width: 300,
                   ),
                 )),
             Center(
-              child: OutlinedButton(
+                child: OutlinedButton(
               onPressed: () => getBarcode(),
               style: OutlinedButton.styleFrom(
                   side: BorderSide(width: 2.0, color: darkGreen)),
               child: Text(
-                "Scan",
+                'Scan',
                 style: TextStyle(color: darkGreen),
               ),
             ))
