@@ -32,19 +32,34 @@ class _TamaScreenState extends State<TamaScreen> {
                   children: [
                     newscores.isNotEmpty ? Draggable(
                       data: newscores.first,
-                      feedback: SvgPicture.asset(
+                      feedback: /*SvgPicture.asset(
+                        "assets/donut.svg",
+                        width: 120,
+                      ),*/
+                      productTitle == 'Club-Mate' ?
+                      Image.asset('assets/club_mate_pixel.png', width: 80,) : SvgPicture.asset(
                         "assets/donut.svg",
                         width: 120,
                       ),
-                      childWhenDragging: SvgPicture.asset(
-                        "assets/donut.svg",
+                      childWhenDragging: /*SvgPicture.asset(
+                        "assets/donut.svg ",
                         width: 80,
                         color: Colors.grey,
+                      ),*/
+                      productTitle == 'Club-Mate' ?
+                      Image.asset('assets/club_mate_pixel.png', width: 80) : SvgPicture.asset(
+                        "assets/donut.svg",
+                        width: 120,
                       ),
-                      child: SvgPicture.asset(
+                      child: /*SvgPicture.asset(
                         "assets/donut.svg",
                         width: 80,
-                      )
+                      )*/
+                      productTitle == 'Club-Mate' ?
+                      Image.asset('assets/club_mate_pixel.png', width: 80,) : SvgPicture.asset(
+                        "assets/donut.svg",
+                        width: 120,
+                      ),
                     ) : Container()
                   ]
                 ),

@@ -85,7 +85,7 @@ class ResultScreen extends StatelessWidget {
               style: OutlinedButton.styleFrom(side: BorderSide(width: 2.0, color: darkGreen)),
               child: Text("Feed!", style: TextStyle(color: darkGreen)),
               onPressed: () {
-                Get.snackbar("Success", "Successfully added product to feed bowl", backgroundColor: Colors.green.withOpacity(0.5));
+                Get.snackbar("Success", "Successfully added product to food bowl", backgroundColor: Colors.green.withOpacity(0.5));
                 newscores.add(productCarbonScore);
               }
             )

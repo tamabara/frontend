@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
         body: Column(
           children: [
             Container(
-                padding: const EdgeInsets.only(bottom: 400),
+                padding: const EdgeInsets.only(bottom: 385),
                 child: Center(
                   child: SvgPicture.asset(
                     'assets/logo2.svg',
