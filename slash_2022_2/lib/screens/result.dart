@@ -15,22 +15,27 @@ SvgPicture? getNutriScore(productNutriScore) {
   if (productNutriScore == 'a') {
     return SvgPicture.asset(
       'assets/nutriscore-a.svg',
+      width: 100,
     );
   } else if (productNutriScore == 'b') {
     return SvgPicture.asset(
       'assets/nutriscore-b.svg',
+      width: 100,
     );
   } else if (productNutriScore == 'c') {
     return SvgPicture.asset(
       'assets/nutriscore-c.svg',
+      width: 100,
     );
   } else if (productNutriScore == 'd') {
     return SvgPicture.asset(
       'assets/nutriscore-d.svg',
+      width: 100,
     );
   } else if (productNutriScore == 'e') {
     return SvgPicture.asset(
       'assets/nutriscore-e.svg',
+      width: 100,
     );
   } else
     return null;
@@ -46,44 +51,48 @@ class ResultScreen extends StatelessWidget {
         backgroundColor: vanilla,
       ),
       body: Column(children: [
-        Center(child: Text(productTitle)),
-        Center(child: Text(productNutriScore)),
-        Center(child: Text(productCarbonScore.toString())),
+        Center(child:
+          Container(
+            padding: EdgeInsets.only(bottom: 15),
+            child:
+              Text(productTitle, style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),))),
+        Center(
+          child: Container(
+            padding: EdgeInsets.all(10),
+            child:
+              productTitle == 'Club-Mate' ? Image.asset('assets/club_mate.jpg') : null),
+          ),
         Center(
           child: getNutriScore(productNutriScore)
         ),
-        // Center(
-        //   child: productNutriScore == 'd'
-        //       ? SvgPicture.asset(
-        //           'assets/nutriscore-d.svg',
-        //           width: 200,
-        //         )
-        //       : null,
-        // ),
-        // Center(
-        //   child: productNutriScore == 'c'
-        //       ? SvgPicture.asset(
-        //           'assets/nutriscore-c.svg',
-        //           width: 200,
-        //         )
-        //       : null,
-        // ),
-        // Center(
-        //   child: productNutriScore == 'b'
-        //       ? SvgPicture.asset(
-        //           'assets/nutriscore-b.svg',
-        //           width: 200,
-        //         )
-        //       : null,
-        // ),
-        // Center(
-        //   child: productNutriScore == 'a'
-        //       ? SvgPicture.asset(
-        //           'assets/nutriscore-a.svg',
-        //           width: 200,
-        //         )
-        //       : null,
-        // ),
+        Center(child:
+          Container(
+            padding: EdgeInsets.all(10),
+            child:
+              Text("Carbon Score:", style: TextStyle(fontSize: 28),)),
+        ),
+        Center(child:
+          Text(productCarbonScore.toString(), style: TextStyle(fontSize: 28, color: productCarbonScore > 70 ? Colors.green : Colors.orange),)),
+        Row(
+          children: [
+            Container(
+              padding: EdgeInsets.only(left: 40, top: 10),
+              child:
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(side: BorderSide(width: 2.0, color: darkGreen)),
+                child: Text("Back", style: TextStyle(color: darkGreen)),
+                onPressed: () => Get.offNamed('/'),)
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 155, top: 10),
+              child:
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(side: BorderSide(width: 2.0, color: darkGreen)),
+                child: Text("Feed!", style: TextStyle(color: darkGreen)),
+                onPressed: () => null),
+            )
+          ],
+        ),
       ]),
     );
   }
