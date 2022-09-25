@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:slash_2022_2/utils/globals.dart';
 import 'dart:convert';
-import 'dart:async';
-import 'dart:io';
+import 'package:flutter/services.dart';
 
 import 'screens/home.dart';
 import 'screens/result.dart';
@@ -16,6 +13,10 @@ import 'utils/colors.dart';
 import 'utils/models.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+
   runApp(const MyApp());
 }
 

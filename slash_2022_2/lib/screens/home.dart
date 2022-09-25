@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:io/ansi.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_zxing/flutter_zxing.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:slash_2022_2/main.dart';
+import '../utils/barcode_scanner.dart';
 
 import '../utils/colors.dart';
 
@@ -23,28 +24,28 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: vanilla,
-        ),
+        appBar: AppBar(),
         body: Column(
           children: [
             Container(
-                padding: EdgeInsets.only(bottom: 400),
+                padding: const EdgeInsets.only(bottom: 400),
                 child: Center(
                   child: SvgPicture.asset(
-                    'assets/slash_logo.svg',
-                    semanticsLabel: 'TamabaraLogo',
-                    width: 300,
+                    'assets/logo2.svg',
+                    width: 300
                   ),
                 )),
             Center(
                 child: OutlinedButton(
-              onPressed: () => getBarcode(),
+              onPressed: () =>
+                  Get.to(BarcodeScanner(onScan: (CodeResult value) {
+                postRequest(value.textString);
+              })),
               style: OutlinedButton.styleFrom(
-                  side: BorderSide(width: 2.0, color: darkGreen)),
-              child: Text(
+                side: const BorderSide(width: 2.0, color: darkGreen)),
+              child: const Text(
                 'Scan',
-                style: TextStyle(color: darkGreen),
+                style: TextStyle(color: darkGreen)
               ),
             ))
           ],
