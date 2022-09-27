@@ -6,6 +6,8 @@ var productNutriScore = null;
 
 var productCarbonScore = null;
 
+var productImageUrl = null;
+
 late SharedPreferences prefs;
 late int score;
 List<int> newscores = [];

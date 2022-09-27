@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
 import 'package:flutter_zxing/src/utils/isolate_utils.dart';
+import 'package:slash_2022_2/widgets/loadingoverlay.dart';
 
 
 class BarcodeScanner extends StatefulWidget {
@@ -37,6 +38,8 @@ class _BarcodeScannerState extends State<BarcodeScanner>
   List<CameraDescription>? cameras;
   CameraController? controller;
   bool _cameraOn = false;
+  bool _scanned = false;
+  LoadingController loadingcontroller = LoadingController();
 
   bool isAndroid() => Theme.of(context).platform == TargetPlatform.android;
 
@@ -90,6 +93,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
   void dispose() {
     stopCameraProcessing();
     controller?.dispose();
+    loadingcontroller.dispose();
     super.dispose();
   }
 
@@ -138,7 +142,9 @@ class _BarcodeScannerState extends State<BarcodeScanner>
           format: widget.codeFormat,
           cropPercent: widget.showCroppingRect ? widget.cropPercent : 0,
         );
-        if (result.isValidBool) {
+        if (result.isValidBool && !_scanned) {
+          _scanned = true;
+          loadingcontroller.show(context);
           widget.onScan(result);
           setState(() {});
           await Future<void>.delayed(const Duration(seconds: 1));
@@ -159,13 +165,25 @@ class _BarcodeScannerState extends State<BarcodeScanner>
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
     final double cropSize = min(size.width, size.height) * widget.cropPercent;
-    return Stack(
-      children: <Widget>[
-        // Camera preview
-        Center(
-          child: _cameraPreviewWidget(cropSize),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        foregroundColor: Colors.transparent,
+        shadowColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        leading: const BackButton(
+          color: Colors.white
         ),
-      ],
+      ),
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: <Widget>[
+          // Camera preview
+          Center(
+            child: _cameraPreviewWidget(cropSize),
+          ),
+        ],
+      )
     );
   }
 
@@ -214,7 +232,7 @@ class _BarcodeScannerState extends State<BarcodeScanner>
           ),
         if (widget.showFlashlight)
           Positioned(
-            bottom: 20,
+            bottom: 45,
             left: 20,
             child: FloatingActionButton(
               onPressed: () {

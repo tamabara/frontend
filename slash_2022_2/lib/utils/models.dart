@@ -1,23 +1,26 @@
 class Product {
-  final String? title;
-  final String? category;
-  final String? nutri_score;
-  final int carbon_score;
+  final String title;
+  final String category;
+  final String nutriscore;
+  final String? imageurl;
+  final int carbonscore;
 
   const Product({
     required this.title,
     required this.category,
-    required this.nutri_score,
-    required this.carbon_score,
+    required this.nutriscore,
+    required this.imageurl,
+    required this.carbonscore,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
       title: json['title'],
       category: json['category'],
-      nutri_score: json['nutri_score'],
-      carbon_score:json['carbon_score'] as int,
+      nutriscore: json['nutri_score'],
+      imageurl: json['image_url'],
+      carbonscore:json['carbon_score'] as int,
+
     );
   }
 }
-
